@@ -1,11 +1,17 @@
 const chaveDaApi = "6d354e2ecace4fc890301513232311";
 
-
-
 const botaoDeBusca = document.querySelector(".btn-busca");
-const inputBusca = document.getElementById("input-busca");
+const inputBusca = document.querySelector(`#input-busca`)
 
-botaoDeBusca.addEventListener("click", async () => {
+inputBusca.addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+        realizarBusca();
+    }
+});
+
+botaoDeBusca.addEventListener("click", realizarBusca);
+
+async function realizarBusca() {
     const cidade = inputBusca.value;
 
     if (!cidade) return;
@@ -13,7 +19,7 @@ botaoDeBusca.addEventListener("click", async () => {
     const dados = await buscarDadosDaCidade(cidade);
 
     if (dados) preencherDadosNaTela(dados, cidade);
-});
+}
 
 async function buscarDadosDaCidade(cidade) {
     const apiUrl =  `https://api.weatherapi.com/v1/current.json?key=${chaveDaApi}&q=${cidade}&aqi=no&lang=pt`;
@@ -25,9 +31,9 @@ async function buscarDadosDaCidade(cidade) {
     const dados = await resposta.json();
     
     return dados;
-};
+}
 
-function preencherDadosNaTela(dados,cidade) {
+function preencherDadosNaTela(dados, cidade) {
     const temperatura = dados.current.temp_c;
     const condicao = dados.current.condition.text;
     const humidade = dados.current.humidity;
@@ -46,5 +52,3 @@ function preencherDadosNaTela(dados,cidade) {
 
     document.getElementById("icone-condicao").setAttribute("src", iconeCondicao);
 }
-
-
